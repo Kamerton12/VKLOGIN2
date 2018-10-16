@@ -57,6 +57,13 @@ public class Main
 
     public static void main(String[] args) throws ClientException, ApiException, IOException, URISyntaxException, InterruptedException
     {
+
+        Random r = new Random();
+        TransportClient tc = HttpTransportClient.getInstance();
+        VkApiClient vk = new VkApiClient(tc);
+        GroupActor groupActor = new GroupActor(172656437,"e1682d74ee13b3c7e64cc9e9dad8ae15aa2c2785ad47a0cae7f3c2084b571c3f6afd124a452143b00d378");
+        vk.messages().send(groupActor, 13466081).randomId(r.nextInt()).message("Start succesfull!!").execute();
+
         URL siteURL1 = null;
         siteURL1 = new URL("http://www.mrk-bsuir.by/ru");
         BufferedReader bf1 = new BufferedReader(new InputStreamReader(siteURL1.openStream()));
@@ -98,17 +105,11 @@ public class Main
 
                 PDFRenderer pdfRenderer = new PDFRenderer(doc);
                 BufferedImage im = pdfRenderer.renderImageWithDPI(4, 200, ImageType.RGB);
-                im =im.getSubimage(111, 514, 1509, 159);
+                im =im.getSubimage(105, 53, 1519, 698);
                 File out = new File("file.jpg");
                 ImageIO.write(im, "jpg",out);
 
                 doc.close();
-                TransportClient tc = HttpTransportClient.getInstance();
-                VkApiClient vk = new VkApiClient(tc);
-                GroupAuthResponse authResponse = null;
-
-                Random r = new Random();
-                GroupActor groupActor = new GroupActor(172656437,"e1682d74ee13b3c7e64cc9e9dad8ae15aa2c2785ad47a0cae7f3c2084b571c3f6afd124a452143b00d378");
 
                 PhotoUpload serverResponse = vk.photos().getMessagesUploadServer(groupActor).execute();
                 MessageUploadResponse messageUploadResponse = vk.upload().photoMessage(serverResponse.getUploadUrl(),out).execute();
