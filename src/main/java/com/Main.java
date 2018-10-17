@@ -76,6 +76,7 @@ public class Main
         groupActor = new GroupActor(172656437,"e1682d74ee13b3c7e64cc9e9dad8ae15aa2c2785ad47a0cae7f3c2084b571c3f6afd124a452143b00d378");
         SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         vk.messages().send(groupActor, 13466081).randomId(r.nextInt()).message("Start succesfull!! " + df.format(new Date())).execute();
+        vk.messages().send(groupActor).message("Bot start succesfull!! " + df.format(new Date())).randomId(r.nextInt()).chatId(2).execute();
 
         URL siteURL1 = null;
         siteURL1 = new URL("http://www.mrk-bsuir.by/ru");
@@ -137,7 +138,7 @@ public class Main
 
             Photo photo = photoList.get(0);
             String attachId = "photo" + photo.getOwnerId() + "_" + photo.getId();
-            vk.messages().send(groupActor).attachment(attachId).randomId(r.nextInt()).chatId(1).execute();
+            vk.messages().send(groupActor).attachment(attachId).randomId(r.nextInt()).chatId(2).execute();
             //Привет для Коли vk.messages().send(groupActor, 152839977).attachment(attachId).message("ТЫ БЫЛ НЕ ПРАВ").randomId(r.nextInt()).execute();
 
 
