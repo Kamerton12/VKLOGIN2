@@ -20,6 +20,8 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
@@ -68,6 +70,13 @@ public class Main
         doc = PDDocument.load(ans);
     }
 
+    @Scheduled(initialDelay = 10000, fixedDelay = 1200000)
+    public String awake() throws IOException
+    {
+        URL u = new URL("https://thawing-sands-87522.herokuapp.com/awake");
+        u.openStream();
+        return "Awaked";
+    }
 
     public Main bb()
     {
@@ -85,7 +94,7 @@ public class Main
         groupActor = new GroupActor(172656437,"e1682d74ee13b3c7e64cc9e9dad8ae15aa2c2785ad47a0cae7f3c2084b571c3f6afd124a452143b00d378");
         SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         vk.messages().send(groupActor, 13466081).randomId(r.nextInt()).message("Start succesfull!! " + df.format(new Date())).execute();
-        vk.messages().send(groupActor).message("Bot start succesfull!! " + df.format(new Date())).randomId(r.nextInt()).chatId(idGroup).execute();
+        //vk.messages().send(groupActor).message("Bot start succesfull!! " + df.format(new Date())).randomId(r.nextInt()).chatId(idGroup).execute();
 
         URL siteURL1 = null;
         siteURL1 = new URL("http://www.mrk-bsuir.by/ru");

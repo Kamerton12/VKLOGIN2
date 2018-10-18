@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -22,8 +24,10 @@ public class HomeController {
         Main m = new Main();
         m.force();
         return "Hello World";
-
     }
+
+
+
     @RequestMapping(value = "/")
     @ResponseBody
     public String greetings() {
