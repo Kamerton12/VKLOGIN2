@@ -73,11 +73,6 @@ public class Main
         return "Awaked";
     }
 
-    public Main bb()
-    {
-        return this;
-    }
-
     @PostConstruct
     public void main() throws IOException, ClientException, ApiException
     {
@@ -122,6 +117,7 @@ public class Main
         return out;
     }
 
+    @Scheduled(cron = "0 10 13 * * MON-SUT")
     public void force() throws IOException, ClientException, ApiException
     {
         Properties properties = new Properties();
@@ -163,7 +159,7 @@ public class Main
 
         Photo photo = photoList.get(0);
         String attachId = "photo" + photo.getOwnerId() + "_" + photo.getId();
-        vk.messages().send(groupActor).attachment(attachId).message("Force update").randomId(r.nextInt()).chatId(idGroup).execute();
+        vk.messages().send(groupActor).attachment(attachId).message("Resending").randomId(r.nextInt()).chatId(idGroup).execute();
 
     }
 
