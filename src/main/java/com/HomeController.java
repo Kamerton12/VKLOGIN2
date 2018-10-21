@@ -26,8 +26,6 @@ public class HomeController {
         return "Hello World";
     }
 
-
-
     @RequestMapping(value = "/")
     @ResponseBody
     public String greetings() {

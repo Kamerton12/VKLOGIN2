@@ -33,15 +33,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 @Component
 public class Main
 {
+    private String accessToken;
     private int idGroup = 2;
     public PDDocument doc;
     public String name;
@@ -54,13 +51,11 @@ public class Main
     {
         InputStream is = url.openStream();
         int len = 0;
-        //ArrayList<byte[]> li= new ArrayList<byte[]>();
         byte[] buf = new byte[1024];
         byte[] ans = new byte[1000000];
         int i = 0;
         while((len = is.read(buf)) != -1)
         {
-            //System.out.println(len);
             for(int j = 0; j < len; j++)
             {
                 ans[i++] = buf[j];
@@ -70,7 +65,7 @@ public class Main
         doc = PDDocument.load(ans);
     }
 
-    @Scheduled(initialDelay = 10000, fixedDelay = 1200000)
+    @Scheduled(initialDelay = 10000, fixedRate = 1200000)
     public String awake() throws IOException
     {
         URL u = new URL("https://thawing-sands-87522.herokuapp.com/awake");
@@ -86,15 +81,18 @@ public class Main
     @PostConstruct
     public void main() throws IOException, ClientException, ApiException
     {
-
+        Properties properties = new Properties();
+        FileInputStream fileInputStream = new FileInputStream("props.properties");
+        properties.load(fileInputStream);
+        accessToken = properties.getProperty("accessToken");
+        fileInputStream.close();
         System.out.println("PostConstruct");
         r = new Random();
         tc = HttpTransportClient.getInstance();
         vk = new VkApiClient(tc);
-        groupActor = new GroupActor(172656437,"e1682d74ee13b3c7e64cc9e9dad8ae15aa2c2785ad47a0cae7f3c2084b571c3f6afd124a452143b00d378");
+        groupActor = new GroupActor(172656437,accessToken);
         SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         vk.messages().send(groupActor, 13466081).randomId(r.nextInt()).message("Start succesfull!! " + df.format(new Date())).execute();
-        //vk.messages().send(groupActor).message("Bot start succesfull!! " + df.format(new Date())).randomId(r.nextInt()).chatId(idGroup).execute();
 
         URL siteURL1 = null;
         siteURL1 = new URL("http://www.mrk-bsuir.by/ru");
@@ -113,12 +111,28 @@ public class Main
         bf1.close();
     }
 
+    public File getImage(PDDocument doc) throws IOException
+    {
+        PDFRenderer pdfRenderer = new PDFRenderer(doc);
+        BufferedImage im = pdfRenderer.renderImageWithDPI(4, 200, ImageType.RGB);
+        im =im.getSubimage(105, 53, 1519, 698);
+        File out = new File("file.jpg");
+        ImageIO.write(im, "jpg",out);
+        doc.close();
+        return out;
+    }
+
     public void force() throws IOException, ClientException, ApiException
     {
+        Properties properties = new Properties();
+        FileInputStream fileInputStream = new FileInputStream("props.properties");
+        properties.load(fileInputStream);
+        accessToken = properties.getProperty("accessToken");
+        fileInputStream.close();
         r = new Random();
         tc = HttpTransportClient.getInstance();
         vk = new VkApiClient(tc);
-        groupActor = new GroupActor(172656437,"e1682d74ee13b3c7e64cc9e9dad8ae15aa2c2785ad47a0cae7f3c2084b571c3f6afd124a452143b00d378");
+        groupActor = new GroupActor(172656437,accessToken);
         URL siteURL = null;
         siteURL = new URL("http://www.mrk-bsuir.by/ru");
         BufferedReader bf = new BufferedReader(new InputStreamReader(siteURL.openStream()));
@@ -138,13 +152,7 @@ public class Main
 
         updatePDF(url);
 
-        PDFRenderer pdfRenderer = new PDFRenderer(doc);
-        BufferedImage im = pdfRenderer.renderImageWithDPI(4, 200, ImageType.RGB);
-        im =im.getSubimage(105, 53, 1519, 698);
-        File out = new File("file.jpg");
-        ImageIO.write(im, "jpg",out);
-
-        doc.close();
+        File out = getImage(doc);
 
         PhotoUpload serverResponse = vk.photos().getMessagesUploadServer(groupActor).execute();
         MessageUploadResponse messageUploadResponse = vk.upload().photoMessage(serverResponse.getUploadUrl(),out).execute();
