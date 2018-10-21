@@ -65,12 +65,12 @@ public class Main
         doc = PDDocument.load(ans);
     }
 
-    @Scheduled(initialDelay = 10000, fixedRate = 1200000)
-    public String awake() throws IOException
+    @Scheduled(initialDelay = 1000, fixedRate = 1500000)
+    public void selfCall() throws IOException
     {
-        URL u = new URL("https://thawing-sands-87522.herokuapp.com/awake");
+        System.out.println("SCHEDULED");
+        URL u = new URL("https://intense-thicket-26176.herokuapp.com/");
         u.openStream();
-        return "Awaked";
     }
 
     @PostConstruct
@@ -117,7 +117,7 @@ public class Main
         return out;
     }
 
-    @Scheduled(cron = "0 10 13 * * MON-SUT")
+    @Scheduled(cron = "0 10 13 * * MON-SAT")
     public void force() throws IOException, ClientException, ApiException
     {
         Properties properties = new Properties();

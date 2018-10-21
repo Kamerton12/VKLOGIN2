@@ -26,15 +26,6 @@ public class HomeController {
         return "Hello World";
     }
 
-    @RequestMapping(value = "/awake")
-    @ResponseBody
-    public String upd() throws ClientException, ApiException, IOException, URISyntaxException, InterruptedException
-    {
-        Main m = new Main();
-        m.force();
-        return "Hello World";
-    }
-
     @RequestMapping(value = "/")
     @ResponseBody
     public String greetings() {
